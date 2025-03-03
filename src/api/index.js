@@ -315,6 +315,24 @@ app.post('/api/search/:type', async (req, res) => {
 	}
 });
 
+app.get('/api/documents', async (req, res) => {
+	try {
+		const result = await client.search({
+			index: indiceName,
+			body: {
+				sort: [{ timestamp: { order: 'desc' } }],
+			},
+		});
+		res.json(result);
+	} catch (error) {
+		console.error('Error fetching documents:', error);
+		res.status(500).json({
+			message: 'Error fetching documents',
+			code: 500,
+		});
+	}
+});
+
 async function createDocument(req) {
 	const latestResult = await client.search({
 		index: indiceName,
