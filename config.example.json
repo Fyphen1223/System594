@@ -1,0 +1,7 @@
+{
+	"username": "elastic",
+	"password": "yourpassword",
+	"indiceName": "yourindicename",
+	"port": 3000,
+	"url": "https://localhost:9200"
+}

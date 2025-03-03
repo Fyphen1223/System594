@@ -9,12 +9,12 @@ const indiceName = 'debate2025';
 
 // Create Express application
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = config.port;
 
 const client = new Client({
-	node: 'https://localhost:9200',
+	node: config.url,
 	auth: {
-		username: 'elastic',
+		username: config.username,
 		password: config.password,
 	},
 	tls: {
