@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ディベート2025 資料を編集</title>
+		<link rel="stylesheet" href="../css/style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>資料を編集</h1>
+				<nav class="nav-links">
+					<a href="/" class="back-link">← 一覧へ戻る</a>
+				</nav>
+			</header>
+
+			<section id="edit-document">
+				<form id="edit-form" class="document-form">
+					<input type="hidden" id="document-id" name="id" />
+					<div class="form-group">
+						<label for="title">タイトル</label>
+						<input type="text" id="title" name="title" required />
+					</div>
+					<div class="form-group">
+						<label for="author">著者</label>
+						<input type="text" id="author" name="author" required />
+					</div>
+					<div class="form-group">
+						<label for="year">年月日</label>
+						<input type="text" id="year" name="year" required />
+					</div>
+					<div class="form-group">
+						<label for="body">コンテンツ</label>
+						<textarea id="body" name="body" rows="6" required></textarea>
+					</div>
+					<div class="form-group">
+						<label for="link">URL/参照元</label>
+						<input type="url" id="link" name="link" required />
+					</div>
+					<div class="form-group">
+						<label for="tags">タグ (コンマで分けてください)</label>
+						<input
+							type="text"
+							id="tags"
+							name="tags"
+							placeholder="tag1, tag2, tag3"
+						/>
+					</div>
+					<div class="form-actions">
+						<button type="submit" class="submit-btn">
+							ドキュメントの編集を確定
+						</button>
+						<button type="button" class="delete-btn" id="delete-btn">
+							ドキュメントを削除
+						</button>
+					</div>
+				</form>
+				<div id="response" class="response-message"></div>
+			</section>
+		</div>
+		<script src="../js/edit.js"></script>
+	</body>
+</html>

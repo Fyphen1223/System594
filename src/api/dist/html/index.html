@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ディベート2025</title>
+		<link rel="stylesheet" href="../css/style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>2025ディベート 資料</h1>
+			</header>
+
+			<section id="search-document">
+				<h2>🔎 資料を検索</h2>
+				<form id="search-form" class="search-form">
+					<div class="form-group">
+						<select id="search-type" name="search-type" class="search-select">
+							<option value="title">タイトルで検索</option>
+							<option value="author">著者で検索</option>
+							<option value="tags">タグで検索</option>
+							<option value="body">コンテンツで検索</option>
+						</select>
+					</div>
+					<div class="form-group search-input-group">
+						<input
+							type="text"
+							id="search-query"
+							name="search-query"
+							placeholder="Enter search terms..."
+							required
+						/>
+						<button type="submit" class="search-btn">検索</button>
+					</div>
+				</form>
+				<div id="search-results" class="search-results">
+					<!-- Results will be dynamically added here -->
+				</div>
+			</section>
+
+			<section id="create-document">
+				<h2>📝 資料を登録</h2>
+				<form id="document-form" class="document-form">
+					<div class="form-group">
+						<label for="title">タイトル</label>
+						<input type="text" id="title" name="title" required />
+					</div>
+					<div class="form-group">
+						<label for="author">著者・団体 </label>
+						<input type="text" id="author" name="author" required />
+					</div>
+					<div class="form-group">
+						<label for="year">年</label>
+						<input type="text" id="year" name="year" required />
+					</div>
+					<div class="form-group">
+						<label for="body">コンテンツ</label>
+						<textarea id="body" name="body" rows="6" required></textarea>
+					</div>
+					<div class="form-group">
+						<label for="link">URL/本の名前など</label>
+						<input type="url" id="link" name="link" required />
+					</div>
+					<div class="form-group">
+						<label for="tags">タグ (コンマで分けてください)</label>
+						<input
+							type="text"
+							id="tags"
+							name="tags"
+							placeholder="tag1, tag2, tag3"
+						/>
+					</div>
+					<div class="form-actions">
+						<button type="submit" class="submit-btn">資料を登録</button>
+					</div>
+				</form>
+				<div id="response" class="response-message"></div>
+			</section>
+
+			<section>
+				<h2>ドキュメントリスト</h2>
+				<div class="document-list-controls">
+					<div class="control-group">
+						<label for="items-per-page">ページ当たりの資料:</label>
+						<select id="items-per-page" onchange="loadDocuments()">
+							<option value="5">5</option>
+							<option value="10" selected>10</option>
+							<option value="20">20</option>
+							<option value="50">50</option>
+						</select>
+					</div>
+					<div class="control-group">
+						<label for="sort-order">並び替え:</label>
+						<select id="sort-order" onchange="loadDocuments()">
+							<option value="id-asc">ID (昇順)</option>
+							<option value="id-desc">ID (降順)</option>
+							<option value="title-asc">タイトル (A-Z)</option>
+							<option value="title-desc">タイトル (Z-A)</option>
+							<option value="date-newest">年月日 (新)</option>
+							<option value="date-oldest">年月日 (古)</option>
+						</select>
+					</div>
+				</div>
+				<div id="documents-list" class="documents-list"></div>
+			</section>
+		</div>
+		<script src="../js/index.js"></script>
+	</body>
+</html>
