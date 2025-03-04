@@ -14,8 +14,7 @@ const PORT = config.port;
 const client = new Client({
 	node: config.url,
 	auth: {
-		username: config.username,
-		password: config.password,
+		apiKey: config.apiKey,
 	},
 	tls: {
 		rejectUnauthorized: false,
@@ -45,6 +44,7 @@ function isValidDocument(document) {
 const checkElasticsearchInfo = async () => {
 	try {
 		const info = await client.info();
+		console.log(info);
 		console.log('Elasticsearch version:', info.version);
 		console.log('Cluster name:', info.cluster_name);
 	} catch (error) {
