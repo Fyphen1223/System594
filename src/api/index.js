@@ -5,7 +5,7 @@ const path = require('path');
 const { Client } = require('@elastic/elasticsearch');
 const config = require('./config.json');
 
-const indiceName = 'debate2025';
+const indiceName = 'db2025';
 
 // Create Express application
 const app = express();
@@ -75,10 +75,10 @@ const initializeElasticsearch = async () => {
 							mappings: {
 								properties: {
 									title: { type: 'text' },
-									author: { type: 'keyword' },
+									author: { type: 'text' },
 									year: { type: 'keyword' },
 									body: { type: 'text' },
-									link: { type: 'keyword' },
+									link: { type: 'text' },
 									tags: { type: 'text' },
 									timestamp: { type: 'date' },
 									id: { type: 'keyword' },
@@ -394,76 +394,142 @@ async function searchDocumentWithTitle(req) {
 					},
 				},
 			},
-			sort: [{ timestamp: { order: 'desc' } }],
+			sort: [{ _score: { order: 'desc' } }],
 		},
 	});
 	return result;
 }
 
 async function searchDocumentWithAuthor(req) {
-	const result = await client.search({
-		index: indiceName,
-		body: {
-			query: {
-				match: {
-					author: {
-						query: req.body.author,
-						operator: 'or',
+	let result;
+	if (req.body.author.includes('"')) {
+		req.body.author = req.body.author.replace(/"/g, '');
+		result = await client.search({
+			index: indiceName,
+			body: {
+				query: {
+					match_phrase: {
+						author: {
+							query: req.body.author,
+						},
 					},
 				},
-			},
-			highlight: {
-				fields: {
-					author: {
-						pre_tags: ['<span class="highlight">'],
-						post_tags: ['</span>'],
-						number_of_fragments: 0,
-					},
-					body: {
-						pre_tags: ['<span class="highlight">'],
-						post_tags: ['</span>'],
-						fragment_size: 200,
-						number_of_fragments: 1,
+				highlight: {
+					fields: {
+						body: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							fragment_size: 200,
+							number_of_fragments: 1,
+						},
+						title: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							number_of_fragments: 0,
+						},
 					},
 				},
+				sort: [{ _score: { order: 'desc' } }],
 			},
-			sort: [{ timestamp: { order: 'desc' } }],
-		},
-	});
+		});
+	} else {
+		result = await client.search({
+			index: indiceName,
+			body: {
+				query: {
+					match: {
+						author: {
+							query: req.body.author,
+						},
+					},
+				},
+				highlight: {
+					fields: {
+						author: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							number_of_fragments: 0,
+						},
+						body: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							fragment_size: 200,
+							number_of_fragments: 1,
+						},
+					},
+				},
+				sort: [{ _score: { order: 'desc' } }],
+			},
+		});
+	}
 	return result;
 }
 
 async function searchDocumentWithBody(req) {
-	const result = await client.search({
-		index: indiceName,
-		body: {
-			query: {
-				match: {
-					body: {
-						query: req.body.body,
-						operator: 'or',
-						fuzziness: 'AUTO',
+	let result;
+	if (req.body.body.includes('"')) {
+		req.body.body = req.body.body.replace(/"/g, '');
+		result = await client.search({
+			index: indiceName,
+			body: {
+				query: {
+					match_phrase: {
+						body: {
+							query: req.body.body,
+						},
 					},
 				},
-			},
-			highlight: {
-				fields: {
-					body: {
-						pre_tags: ['<span class="highlight">'],
-						post_tags: ['</span>'],
-						fragment_size: 200,
-						number_of_fragments: 1,
-					},
-					title: {
-						pre_tags: ['<span class="highlight">'],
-						post_tags: ['</span>'],
-						number_of_fragments: 0,
+				highlight: {
+					fields: {
+						body: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							fragment_size: 200,
+							number_of_fragments: 1,
+						},
+						title: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							number_of_fragments: 0,
+						},
 					},
 				},
+				sort: [{ _score: { order: 'desc' } }],
 			},
-			sort: [{ timestamp: { order: 'desc' } }],
-		},
-	});
+		});
+		return result;
+	} else {
+		result = await client.search({
+			index: indiceName,
+			body: {
+				query: {
+					match: {
+						body: {
+							query: req.body.body,
+							operator: 'or',
+							fuzziness: 'AUTO',
+						},
+					},
+				},
+				highlight: {
+					fields: {
+						body: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							fragment_size: 200,
+							number_of_fragments: 1,
+						},
+						title: {
+							pre_tags: ['<span class="highlight">'],
+							post_tags: ['</span>'],
+							number_of_fragments: 0,
+						},
+					},
+				},
+				sort: [{ _score: { order: 'desc' } }],
+			},
+		});
+	}
 	return result;
 }
 
@@ -499,7 +565,7 @@ async function searchDocumentWithTags(req) {
 					},
 				},
 			},
-			sort: [{ timestamp: { order: 'desc' } }],
+			sort: [{ _score: { order: 'desc' } }],
 		},
 	});
 	return result;
