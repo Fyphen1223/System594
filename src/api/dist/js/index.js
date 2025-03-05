@@ -136,8 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
 					const tagsDisplay = doc.tags.map((tag) => {
 						const highlightedTag =
 							highlight.tags &&
-							highlight.tags.find((t) =>
-								t.toLowerCase().includes(tag.toLowerCase())
+							highlight.tags.find(
+								(t) =>
+									t.toLowerCase().includes(tag.toLowerCase()) ||
+									tag.toLowerCase().includes(t.toLowerCase())
 							);
 						return highlightedTag || tag;
 					});
